@@ -1,6 +1,6 @@
 module github.com/jniltinho/simplehttpserver
 
-go 1.21.6
+go 1.21
 
 require github.com/gofiber/fiber/v3 v3.0.0-20240124121856-755f133ac161
 
