@@ -2,7 +2,10 @@ module github.com/jniltinho/simplehttpserver
 
 go 1.21
 
-require github.com/gofiber/fiber/v3 v3.0.0-20240124121856-755f133ac161
+require (
+	github.com/gofiber/fiber/v3 v3.0.0-20240124121856-755f133ac161
+	golang.org/x/sync v0.6.0
+)
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect

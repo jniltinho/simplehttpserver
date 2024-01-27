@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/logger"
+	"golang.org/x/sync/errgroup"
 )
 
 // Options of the tool
@@ -19,13 +22,23 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 
-	app.Get("/hello", func(c fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
+	registerRoutes(app, options)
+
+	g, ctx := errgroup.WithContext(context.Background())
+	g.Go(func() error {
+		return app.Listen(options.ListenAddress)
 	})
 
-	app.Static("/", options.Folder)
+	// Wait for shutdown signal
+	g.Go(func() error {
+		<-ctx.Done()
+		return app.Shutdown()
+	})
 
-	app.Listen(options.ListenAddress)
+	if err := g.Wait(); err != nil {
+		fmt.Println("error:", err)
+	}
+
 }
 
 func ParseOptions() *Options {
@@ -39,4 +52,9 @@ func ParseOptions() *Options {
 	flag.Parse()
 
 	return options
+}
+
+func registerRoutes(app *fiber.App, options *Options) {
+	// Root route
+	app.Static("/", options.Folder, fiber.Static{Browse: true})
 }
