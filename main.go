@@ -56,5 +56,5 @@ func ParseOptions() *Options {
 
 func registerRoutes(app *fiber.App, options *Options) {
 	// Root route
-	app.Static("/", options.Folder, fiber.Static{Browse: true, Download: true})
+	app.Static("/", options.Folder, fiber.Static{Browse: true})
 }
