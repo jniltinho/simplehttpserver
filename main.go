@@ -57,4 +57,14 @@ func ParseOptions() *Options {
 func registerRoutes(app *fiber.App, options *Options) {
 	// Root route
 	app.Static("/", options.Folder, fiber.Static{Browse: true})
+
+	app.Get("/ping", func(c fiber.Ctx) error {
+		return c.SendString("pong")
+	})
+	app.Get("/health", func(c fiber.Ctx) error {
+		return c.SendString("OK")
+	})
+	app.Get("/version", func(c fiber.Ctx) error {
+		return c.SendString("v0.0.1")
+	})
 }
